@@ -1,0 +1,16 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="icons">
+        <file alias="user.png">user.png</file>
+        <file alias="add-user.png">add-user.png</file>
+        <file alias="create-account.png">create-account.png</file>
+        <file alias="email.png">email.png</file>
+        <file alias="eye.png">eye.png</file>
+        <file alias="header.png">header.png</file>
+        <file alias="padlock.png">padlock.png</file>
+        <file alias="telegram.png">telegram.png</file>
+        <file alias="typing.png">typing.png</file>
+        <file alias="warning.png">warning.png</file>
+        <file alias="hide.png">hide.png</file>
+    </qresource>
+</RCC>
