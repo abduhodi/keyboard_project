@@ -47,12 +47,12 @@ class Database:
             DB.close()
     
 
-    def read(self, email: str, passwd: str):
+    def read(self):
         try:
             DB = self.connect_db()
             cur = DB.cursor()
-            cur.execute("SELECT * FROM Users WHERE email = %s and password = %s", (email, passwd))
-            data = cur.fetchone()
+            cur.execute("SELECT * FROM Users")
+            data = cur.fetchall()
             return data
         except DatabaseError as de:
             print(de)

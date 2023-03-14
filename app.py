@@ -46,7 +46,7 @@ if __name__ == "__main__":
     sign_in.signal.main_signal.connect(signin)
     
     sign_up.signal.sign_in_signal.connect(sign_in.show)
-    sign_up.signal.sign_up_signal.connect(signup_geo)
+    sign_up.signal.sign_in_signal.connect(signup_geo)
     sign_up.signal.main_signal.connect(main.show)
     sign_up.signal.main_signal.connect(signup)
 

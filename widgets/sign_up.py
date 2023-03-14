@@ -7,6 +7,7 @@ from widgets.check import Check
 from widgets.user import User
 from widgets.db import Database
 from widgets.tg import token
+import threading
 from img import resources
 
 
@@ -20,6 +21,19 @@ class SignUp(QMainWindow):
         self.setWindowTitle(title)
         self.signal = MySignals()
         self.registered = False
+        self.data = []
+        self.check_thread = threading.Thread(target=self.check)
+
+
+    def showEvent(self, a0: QShowEvent) -> None:
+        del self.check_thread
+        self.check_thread = threading.Thread(target=self.check)
+        self.check_thread.start()
+
+
+    def check(self):
+        db = Database()
+        self.data = db.read()
 
 
     def get_point(self):
@@ -28,14 +42,10 @@ class SignUp(QMainWindow):
         return (x, y)
 
 
-    def closeEvent(self, a0: QCloseEvent) -> None:
-        self.signal.close.emit()
-
-
     def closeEvent(self, event: QCloseEvent) -> None:
         if not self.registered:
             self.signal.sign_in_signal.emit()
-            self.registered = False
+        self.registered = False
 
     def setupWindow(self):
         style_label = """
@@ -239,9 +249,25 @@ class SignUp(QMainWindow):
             self.password_input.setEchoMode(QLineEdit().echoMode().Password)
             self.passwd_view.setIcon(QIcon(":/icons/hide.png"))
 
+
+    def exist_email(self) -> bool:
+        for user in self.data:
+            if self.email_input.text() == user[2]:
+                return True
+        return False
+
+
+    def exist_telegramId(self) -> bool:
+        for user in self.data:
+            if self.telegram_id_input.text() == user[3]:
+                return True
+        return False
+
     
     def signup(self):
         db = Database()
+
+
         if not Check.is_valid_name(self.name_input.text()):
             self.name_input_error = QMessageBox.critical(self, 'Error', 'Name error!')
         elif not Check.is_valid_email(self.email_input.text()):
@@ -252,9 +278,9 @@ class SignUp(QMainWindow):
             self.telegram_id_input_error = QMessageBox.critical(self, 'Error', 'Invalid Telegram ID!')
         elif not self.terms_conditions_check.isChecked():
             self.check_error = QMessageBox.critical(self, 'Error', 'You should agree with Terms and Condition!')
-        elif db.exist_email(self.email_input.text()):
-            self.exist_email = QMessageBox.critical(self, "Error", "Sorry!, This email is already exists")
-        elif db.exist_telegramId(self.telegram_id_input.text()):
+        elif self.exist_email():
+            self.exist_mail = QMessageBox.critical(self, "Error", "Sorry!, This email is already exists")
+        elif self.exist_telegramId():
             self.exist_telegram = QMessageBox.critical(self, "Error", "Sorry!, This telegramId is already exists")
         else:
             if self.send_notification():

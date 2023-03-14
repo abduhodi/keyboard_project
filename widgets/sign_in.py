@@ -15,6 +15,8 @@ class SignIn(QMainWindow):
         super().__init__()
         self.check_thread = threading.Thread(target=self.check)
 
+        self.data = []
+
         self.setWindowTitle("Sign in")
         self.setWindowIcon(QIcon(":/icons/user.png"))
         self.setGeometry(500, 150, 400, 500)
@@ -23,14 +25,16 @@ class SignIn(QMainWindow):
         self.signal = MySignals()
 
 
+    def showEvent(self, a0: QShowEvent) -> None:
+        del self.check_thread
+        self.check_thread = threading.Thread(target=self.check)
+        self.check_thread.start()
+
+
     def get_point(self):
         x = self.geometry().topLeft().x()
         y = self.geometry().topLeft().y()
         return (x, y)
-
-    
-    def closeEvent(self, a0: QCloseEvent) -> None:
-        self.signal.close.emit()
 
 
     def setSignInWindow(self):
@@ -134,7 +138,6 @@ class SignIn(QMainWindow):
         layout.addLayout(passwd_layout)
         layout.addLayout(sign_in_btn_layout)
         layout.addLayout(register_btn_layout)
-        # layout.addLayout(self.loader_layout)
         layout.addSpacing(50)
 
 
@@ -158,11 +161,7 @@ class SignIn(QMainWindow):
 
     def check(self):
         db = Database()
-        global data
-        data = db.read(self.email_input.text(), self.passwd_input.text())
-        if data:
-            return data
-        return None
+        self.data = db.read()
 
     
     def sign_in(self):
@@ -171,10 +170,11 @@ class SignIn(QMainWindow):
         elif not Check.is_valid_passwd(self.passwd_input.text()):
             self.passwd_input_error = QMessageBox.critical(self, "Password error", "Password input error!")
         else:
-            del self.check_thread
-            self.check_thread = threading.Thread(target=self.check)
-            self.check_thread.start()
-            self.check_thread.join()   
+            data = ()
+            for user in self.data:
+                if self.email_input.text() == user[2] and self.passwd_input.text() == user[4]:
+                    data = user
+                    break
             if data:
                 self.user = User(
                     data[1],
