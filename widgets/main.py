@@ -18,8 +18,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.speed = 0.009
 
-        self.latin = "ABCDEFGHIJKLMNOPQRSTUVWXVZabcdefghijklmnopqrstuvwxvz"
-        self.crylic = "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя"
+        self.latin = "ABCDEFGHIJKLMNOPQRSTUVWXVZabcdefghijklmnopqrstuvwxvz0123456789!@#$%&*()+=[]?"
+        self.crylic = "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя0123456789!@#$%&*()+=[]?"
         self.lang = self.latin
         self.type = 'en'
         self.keyboard = KeyboardWidget(self.type)
