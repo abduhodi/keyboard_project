@@ -246,8 +246,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def run_letter(self):
         while self.time_lcd.intValue():
-            self.running_letter.setText(random.choice(self.lang))
             self.breaker = False
+            self.running_letter.setText(random.choice(self.lang))
             x = random.randint(0, self.runningWidget.width() - 25)
             self.running_letter.setGeometry(x, 0, 25, 25)
             h = self.runningWidget.height() - 25
@@ -319,7 +319,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.running_letter.text() == key and code != 16777220:
                 self.breaker = True
                 self.score_up()
-            elif code not in [32, 16777251, 16777249, 16777248, 16777252, 16777217, 16777219, 16777234, 16777235, 16777236, 16777237, 16777220]:
+            elif code not in [32, 16777251, 16777249, 16777248, 16777252, 16777217, 16777219, 16777234, 16777235, 16777236, 16777237, 16777220, 16777216]:
                 self.score_minus()
 
 
